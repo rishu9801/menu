@@ -13,6 +13,7 @@ const Menu = () => {
   const [modifierModalStatus, setModifierModalStatus] = useState(false);
   const [modalItem, setModalItem] = useState(null);
   const [modifiers, setModifiers] = useState({});
+  const [itemQty, setItemQty] = useState(0);
 
   const getSubtotal = () => {
     let newCart = cart;
@@ -71,6 +72,8 @@ const Menu = () => {
 
     setCart({ ...newCart });
     getSubtotal();
+    setModifiers({});
+    setItemQty(0);
   };
 
   const addToCart = (item) => {
@@ -107,12 +110,12 @@ const Menu = () => {
         console.table(myCart);
         setCart({ ...myCart });
         console.log(cart);
-      } else if (type === "decrement" && myCart[item].qty >= 0) {
+      } else if (type === "decrement" && myCart[item].qty > 0) {
         myCart[item].qty = cart[item].qty - 1;
         console.table(myCart);
         setCart({ ...myCart });
         console.log(cart);
-      } else if (myCart[item].qty === 0) {
+      } else if (type === "decrement" && myCart[item].qty === 0) {
         removeFromCart(item);
       }
       getSubtotal();
@@ -152,6 +155,8 @@ const Menu = () => {
               cart={cart}
               updateCart={updateCart}
               addToCartModal={addToCartModal}
+              itemQty={itemQty}
+              setItemQty={setItemQty}
             />
           </div>
         </div>

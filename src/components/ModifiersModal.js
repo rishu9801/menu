@@ -9,9 +9,9 @@ const ModifiersModal = ({
   cart,
   updateCart,
   addToCartModal,
+  itemQty,
+  setItemQty,
 }) => {
-  const [itemQty, setItemQty] = useState(0);
-
   const add = (item) => {
     addToCartModal(item, itemQty);
   };
@@ -20,7 +20,7 @@ const ModifiersModal = ({
     let existingMod = modifiers;
 
     if (modifier.id in existingMod) {
-      if (type === "decrement" && existingMod[modifier.id].qty >= 0) {
+      if (type === "decrement" && existingMod[modifier.id].qty > 1) {
         existingMod[modifier.id].qty = existingMod[modifier.id].qty - 1;
         setModifiers({ ...existingMod });
       } else if (
@@ -154,6 +154,7 @@ const ModifiersModal = ({
                 <div>
                   <button
                     className="btn btn-outline-danger btn-sm rounded-circle"
+                    disabled={itemQty === 0}
                     onClick={() => {
                       setItemQty(itemQty - 1);
                     }}
@@ -163,6 +164,7 @@ const ModifiersModal = ({
                   <span className="mx-3">{itemQty}</span>
                   <button
                     className="btn btn-outline-danger btn-sm rounded-circle"
+                    disabled={itemQty === modalItem.maximumqty}
                     onClick={() => {
                       setItemQty(itemQty + 1);
                     }}

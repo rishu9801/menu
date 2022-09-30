@@ -38,22 +38,24 @@ const Cart = ({ cart, subTotal, totalTax, removeFromCart, updateCart }) => {
               if (cart[item].deliveryMedium === false) {
                 return (
                   <>
-                    <div key={index}>
+                    <div key={index} className="mb-2">
                       <div className="d-flex justify-content-between">
                         <p> {cart[item].name} </p>
                         <div className="d-flex align-items-center">
                           <span>
                             <button
                               className="btn btn-outline-danger btn-sm rounded-circle"
+                              disabled={cart[item].qty === 0}
                               onClick={() => {
                                 updateCart(item, "decrement");
                               }}
                             >
                               <i className="fas fa-minus"></i>
                             </button>
-                            <span>{cart[item].qty}</span>
+                            <span className="mx-3">{cart[item].qty}</span>
                             <button
                               className="btn btn-outline-danger btn-sm rounded-circle"
+                              disabled={cart[item].qty === cart[item].maxQty}
                               onClick={() => {
                                 updateCart(item, "increment");
                               }}
@@ -61,13 +63,15 @@ const Cart = ({ cart, subTotal, totalTax, removeFromCart, updateCart }) => {
                               <i className="fas fa-plus"></i>
                             </button>
                           </span>
-                          <p>{cart[item].price}</p>
+                          <p className="mx-3">{cart[item].price}</p>
                           <button
-                            className="btn-close btn-sm"
+                            className="btn btn-sm"
                             onClick={() => {
                               removeFromCart(item);
                             }}
-                          ></button>
+                          >
+                            <i className="fas fa-close"></i>
+                          </button>
                         </div>
                       </div>
                       {cart[item].modifiers &&
@@ -88,21 +92,23 @@ const Cart = ({ cart, subTotal, totalTax, removeFromCart, updateCart }) => {
                 return (
                   <>
                     <div key={index}>
-                      <div className="d-flex justify-content-between">
+                      <div className="d-flex justify-content-between align-item-center">
                         <p> {cart[item].name} </p>
                         <div className="d-flex align-items-center">
                           <span>
                             <button
                               className="btn btn-outline-danger btn-sm rounded-circle"
+                              disabled={cart[item].qty === 0}
                               onClick={() => {
                                 updateCart(item, "decrement");
                               }}
                             >
                               <i className="fas fa-minus"></i>
                             </button>
-                            <span>{cart[item].qty}</span>
+                            <span className="mx-3">{cart[item].qty}</span>
                             <button
                               className="btn btn-outline-danger btn-sm rounded-circle"
+                              disabled={cart[item].qty === cart[item].maxQty}
                               onClick={() => {
                                 updateCart(item, "increment");
                               }}
@@ -110,19 +116,27 @@ const Cart = ({ cart, subTotal, totalTax, removeFromCart, updateCart }) => {
                               <i className="fas fa-plus"></i>
                             </button>
                           </span>
-                          <p>{cart[item].price}</p>
+                          <p className="mx-3">
+                            {Number(cart[item].price).toFixed(2)}
+                          </p>
                           <button
-                            className="btn-close btn-sm"
+                            className="btn btn-sm"
                             onClick={() => {
                               removeFromCart(item);
                             }}
-                          ></button>
+                          >
+                            <i className="fas fa-close"></i>
+                          </button>
                         </div>
                       </div>
-                      {cart[item].modifiers &&
-                        Object.keys(cart[item].modifiers).map((i, key) => (
-                          <p key={key}>{cart[item].modifiers[i].name}</p>
-                        ))}
+                      <div className="d-flex modifiers-list">
+                        {cart[item].modifiers &&
+                          Object.keys(cart[item].modifiers).map((i, key) => (
+                            <p key={key}>
+                              <small>{cart[item].modifiers[i].name}</small>
+                            </p>
+                          ))}
+                      </div>
                     </div>
                   </>
                 );
@@ -132,9 +146,34 @@ const Cart = ({ cart, subTotal, totalTax, removeFromCart, updateCart }) => {
         )}
 
         {Object.keys(cart).length > 0 && (
-          <p>
-            Subtotal:{subTotal} Tax:{totalTax}
-          </p>
+          <>
+            <hr />
+            <div className="d-flex justify-content-between mb-3">
+              <p>
+                <b>Subtotal</b>
+              </p>
+              <p>
+                <b>${subTotal}</b>
+              </p>
+            </div>
+            <div className="d-flex justify-content-between">
+              <p>
+                <b>Tax</b>
+              </p>
+              <p>
+                <b>${totalTax}</b>
+              </p>
+            </div>
+            <hr />
+            <div className="d-flex justify-content-between">
+              <p className="h5">
+                <b>Total</b>
+              </p>
+              <p>
+                <b>${(Number(subTotal) + Number(totalTax)).toFixed(2)}</b>
+              </p>
+            </div>
+          </>
         )}
       </div>
     </div>
